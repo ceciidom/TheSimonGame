@@ -4,7 +4,6 @@ var userClickedPattern = [];
 5// new empty array called gamePattern
 var gamePattern = [];
 
-//3. At the top of the game.js file, create a new array called buttonColours and set it to hold the sequence "red", "blue", "green", "yellow" .
 var buttonColours = ["red","blue","green","yellow"];
 
 //Step 7 - Start the game
@@ -32,16 +31,35 @@ function nextSequence(){
     .fadeIn(100);
 
   playSound(randomChosenColour);
+  level++;
+  $("#level-title").text("Level " + level);
+
+}
+userTurn();
+
+function userTurn(){
+ $(".btn").click(function (userChosenColour) {
+   var userChosenColour = $(this).attr("id");
+
+   playSound(userChosenColour);
+   animatePress(userChosenColour);
+   userClickedPattern.push(userChosenColour);
+ });
+  //user click on button
+  //button makes sound and flashes
+ 
+  //color gets loaded to the user's pattern
+  //keep clicking until the user's clicked pattern is the same length as the game pattern.
+  
+  var currentLevel = level;
+  checkAnswers(currentLevel);
+  
+  //after the same number of clicks as the gamePattern.length --> check answers()
+  //empty users pattern
+  
+   
 }
 
-$(".btn").click(function(userChosenColour){
-    var userChosenColour = $(this).attr("id");
-
-    userClickedPattern.push(userChosenColour);
-    playSound(userChosenColour);
-    animatePress(userChosenColour);
-
-})
 
 function playSound (name){
     var audio = new Audio(`./sounds/${name}.mp3`);
@@ -55,6 +73,27 @@ function animatePress (currentColour) {
     setTimeout(function(){$("#" + currentColour).removeClass("pressed")}, 100);
     }
 
+//Check the user's answers againstthe game sequence
+
+function checkAnswers (currentLevel){
+
+  if (userClickedPattern.toString() === gamePattern.toString()){
+    console.log ("Success! you move to the next level");
+       
+    setTimeout(nextSequence, 1500);
+
+  } else { GameOver () 
+    }
+  }
+
+  function GameOver(){
+    console.log("Wronganswer");
+    $("h1").text("Game Over, Press Any Key to Start");
+    $("body").addClass("game-over");
+    setTimeout(function(){$("body").removeClass("game-over")}, 300);
+    started = false;
+    currentlevel = 0;
+  }
 
 
 
